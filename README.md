@@ -38,7 +38,7 @@ Ok, now you should be on the app settings page, let me guide you through.
 }
 ```
 * **Force selection of brand:** Make the brand selection mandatory.
-* **Mandatory requester email:** Make the request email address mandatory.
+* **Mandatory requester email:** Make the requester email address mandatory.
 
 **Voila**, reload your Zendesk and everything should be working fine. Go to the new ticket view, select a brand, enter information and click submit. Your ticket should have been created with the given recipient.
 
