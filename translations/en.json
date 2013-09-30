@@ -1,0 +1,33 @@
+{
+  "app": {
+    "description":  "Create ticket for brand",
+    "name":         "Create ticket for brand",
+
+    "parameters": {
+      "brand_field_id" : {
+        "label": "Brand Field ID",
+        "helpText": "e.g. \"22758751\""
+      },
+      "mapping" : {
+        "label": "Email-Brand mapping JSON",
+        "helpText": "A Json string which maps brand names to the associated email addresses. Example: [{\"brand1\" : \"service@brand1.de\"}, {\"brand2\" : \"service@brand2.de\"}]"
+      },
+      "force_selection_of_brand" : {
+        "label": "Force selection of brand",
+        "helpText": "If activated manual tickets can only be created if a brand was selected in the brand custom field."
+      },
+      "mandatory_requester_email": {
+        "label": "Mandatory requester email"
+      }
+    }
+  },
+
+  "errors": {
+    "requester": "Requester cannot be blank.",
+    "requester_email": "Requester's email cannot be blank.",
+    "brand": "Brand cannot be blank."
+  },
+  "notice": {
+    "ticket_created": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> has been created"
+  }
+}

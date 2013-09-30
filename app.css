@@ -1,0 +1,9 @@
+#main p{
+  font-size: 14px;
+}
+
+.open_ticket_button {
+  width: 250px;
+  margin-left: 38px;
+  margin-top: 20px;
+}

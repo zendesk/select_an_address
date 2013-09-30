@@ -1,0 +1,34 @@
+{
+  "name": "Create ticket for brand app",
+  "author": {
+    "name": "Zendesk Services",
+    "email": "services@zendesk.com"
+  },
+
+  "defaultLocale": "en",
+  "private": true,
+  "location": "new_ticket_sidebar",
+  "frameworkVersion": "1.0",
+  "noTemplate": true,
+  "parameters": [
+    {
+      "name": "brand_field_id",
+      "type": "number",
+      "required": true
+    },
+    {
+      "name": "mapping",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "force_selection_of_brand",
+      "type": "checkbox"
+    },
+    {
+      "name": "mandatory_requester_email",
+      "type": "checkbox",
+      "default": false
+    }
+  ]
+}
