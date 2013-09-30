@@ -10,11 +10,11 @@
       },
       "mapping" : {
         "label": "Email-Brand mapping JSON",
-        "helpText": "A Json string which maps brand names to the associated email addresses. Example: [{\"brand1\" : \"service@brand1.de\"}, {\"brand2\" : \"service@brand2.de\"}]"
+        "helpText": "A Json string which maps brand names to the associated email addresses. Example: {\"brand1\" : \"service@brand1.de\", \"brand2\" : \"service@brand2.de\"}"
       },
       "force_selection_of_brand" : {
         "label": "Force selection of brand",
-        "helpText": "If activated manual tickets can only be created if a brand was selected in the brand custom field."
+        "helpText": "Selection of a brand will become mandatory"
       },
       "mandatory_requester_email": {
         "label": "Mandatory requester email"
