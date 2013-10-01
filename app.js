@@ -24,7 +24,7 @@
         if (this.shouldCreateTicket(done, fail)){
           try {
             attributes = this.serializeTicketAttributes();
-
+            console.log(attributes);
             this.ajax('createTicket', attributes)
               .done(function(data){
                 fail(this.I18n.t('notice.ticket_created', { id: data.ticket.id }));
@@ -103,14 +103,22 @@
 
     forEachCustomField: function(block){
       _.each(this._customFields(), function(field){
-        var id = field.match(this.customFieldRegExp)[1];
+        var id = field.match(this.customFieldRegExp)[1],
+            value = this.normalizeValue(this.ticket().customField(field));
 
         block.call(this, {
           label: field,
           id: id,
-          value: this.ticket().customField(field)
+          value: value
         });
       }, this);
+    },
+
+    normalizeValue: function(value){
+      return {
+        "yes": true,
+        "no": false
+      }[value] || value;
     },
 
     clearAttributes: function(){
