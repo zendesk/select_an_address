@@ -45,3 +45,5 @@ Ok, now you should be on the app settings page, let me guide you through.
 ##Contribution
 
 Improvements are always welcome. To contribute, please submit detailed Pull Requests.
+
+By downloading this app, you are agreeing to our [terms and conditions](https://github.com/zendesklabs/wiki/wiki/Terms-and-Conditions)
