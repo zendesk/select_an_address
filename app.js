@@ -24,7 +24,7 @@
         if (this.shouldCreateTicket(done, fail)){
           try {
             attributes = this.serializeTicketAttributes();
-            console.log(attributes);
+
             this.ajax('createTicket', attributes)
               .done(function(data){
                 fail(this.I18n.t('notice.ticket_created', { id: data.ticket.id }));
@@ -63,24 +63,29 @@
         status: ticket.status(),
         tags: ticket.tags(),
         type: ticket.type(),
-        collaborators: _.map(ticket.collaborators(), function(cc){ return cc.email(); }),
+        collaborators: _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
         form_id: (ticket.form() && ticket.form().id()) || null,
         assignee_id: (ticket.assignee().user() && ticket.assignee().user().id()) || null,
         group_id: (ticket.assignee().group() && ticket.assignee().group().id()) || null,
-        requester_id: (ticket.requester() && ticket.requester().id()) || null,
         recipient: this.brandEmail(),
         custom_fields: this.serializeCustomFields(),
         submitter_id: this.currentUser().id()
       };
 
-      if (this._isEmpty(String(attributes.requester_id))){
-        throw({ message: this.I18n.t('errors.requester') });
-      }
 
-      if (ticket.requester() &&
-          this._isEmpty(ticket.requester().email()) &&
-          this.setting('mandatory_requester_email')){
-        throw({ message: this.I18n.t('errors.requester_email') });
+
+      if (ticket.requester()) {
+        if (ticket.requester().id()) {
+          attributes.requester_id = ticket.requester().id();
+        } else if (ticket.requester().email()) {
+          attributes.requester = {
+            email: ticket.requester().email(),
+            name: ticket.requester().email().split('@')[0]
+          };
+        } else if (this._isEmpty(ticket.requester().email()) &&
+                   this.setting('mandatory_requester_email')) {
+          throw({ message: this.I18n.t('errors.requester_email') });
+        }
       }
 
       return { ticket: attributes };
