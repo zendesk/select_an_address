@@ -8,6 +8,9 @@ This App will help you create tickets with predefined recipients.
 
 Let's say your product is available across multiple kingdoms and you want to use a different email address for each kingdom. First create a custom dropdown field with the name of the kingdoms.
 
+It should look like this: 
+![](http://f.cl.ly/items/0a1P3E3z190t193Z3i22/Screen%20Shot%202013-09-30%20at%2010.11.20.png)
+
 Once done, keep the ID of this custom field on the side.
 
 ## App location:
