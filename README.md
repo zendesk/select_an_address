@@ -16,12 +16,13 @@ Once done, keep the ID of this custom field on the side.
 
 ## App location:
 
-* Ticket sidebar
+* Ticket sidebar (THIS IS A NO TEMPLATE APP - IT WILL NOT SHOW ANYWHERE)
 
 ## Features:
 
 * Create tickets for different brands
 * Pull information from a custom field
+* No Template App
 
 ## Set-up/installation instructions:
 
@@ -58,5 +59,5 @@ Pull requests are welcome.
 
 ## Screenshot(s):
 
-![](http://f.cl.ly/items/0a1P3E3z190t193Z3i22/Screen%20Shot%202013-09-30%20at%2010.11.20.png)
+(THIS IS A NO TEMPLATE APP - IT WILL NOT SHOW ANYWHERE)
 
