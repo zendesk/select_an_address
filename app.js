@@ -64,7 +64,7 @@
         tags: ticket.tags(),
         type: ticket.type(),
         collaborators: _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
-        form_id: (ticket.form() && ticket.form().id()) || null,
+        ticket_form_id: (ticket.form() && ticket.form().id()) || null,
         assignee_id: (ticket.assignee().user() && ticket.assignee().user().id()) || null,
         group_id: (ticket.assignee().group() && ticket.assignee().group().id()) || null,
         recipient: this.brandEmail(),
