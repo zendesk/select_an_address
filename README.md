@@ -1,25 +1,36 @@
+:warning: *Use of this software is subject to important terms and conditions as set forth in the License file* :warning:
+
 # Create Ticket for brand App
+
+## Description:
 
 This App will help you create tickets with predefined recipients.
 
-## Steps
-
-### Creation a Brand Field
-
 Let's say your product is available across multiple kingdoms and you want to use a different email address for each kingdom. First create a custom dropdown field with the name of the kingdoms.
-It should look a bit like that in your new ticket view:
+
+It should look like this: 
 
 ![](http://f.cl.ly/items/0a1P3E3z190t193Z3i22/Screen%20Shot%202013-09-30%20at%2010.11.20.png)
 
-Once done, keep the id of this custom field on the side.
+Once done, keep the ID of this custom field on the side.
 
-### Installation
+## App location:
+
+* Ticket sidebar (THIS IS A NO TEMPLATE APP - IT WILL NOT SHOW ANYWHERE)
+
+## Features:
+
+* Create tickets for different brands
+* Pull information from a custom field
+* No Template App
+
+## Set-up/installation instructions:
+
+Installation
 
 1. Create the app with the zip file downloaded from this github page.
 2. Browse the "Private App" section of the marketplace.
 3. Click on the "Ticket for brand" app.
-
-### Configuration
 
 Ok, now you should be on the app settings page, let me guide you through.
 
@@ -42,8 +53,11 @@ Ok, now you should be on the app settings page, let me guide you through.
 
 **Voila**, reload your Zendesk and everything should be working fine. Go to the new ticket view, select a brand, enter information and click submit. Your ticket should have been created with the given recipient.
 
-##Contribution
+## Contribution:
 
-Improvements are always welcome. To contribute, please submit detailed Pull Requests.
+Pull requests are welcome.
 
-By downloading this app, you are agreeing to our [terms and conditions](https://github.com/zendesklabs/wiki/wiki/Terms-and-Conditions)
+## Screenshot(s):
+
+(THIS IS A NO TEMPLATE APP - IT WILL NOT SHOW ANYWHERE)
+
