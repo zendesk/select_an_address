@@ -58,6 +58,7 @@
       var ticket = this.ticket(),
       attributes = {
         subject: ticket.subject(),
+        comment: this.serializeCommentAttributes(),
         description: this.comment().text(),
         priority: ticket.priority(),
         status: ticket.status(),
@@ -71,8 +72,6 @@
         custom_fields: this.serializeCustomFields(),
         submitter_id: this.currentUser().id()
       };
-
-
 
       if (ticket.requester()) {
         if (ticket.requester().id()) {
@@ -89,6 +88,21 @@
       }
 
       return { ticket: attributes };
+    },
+
+    serializeCommentAttributes: function() {
+      var comment = this.comment(),
+          attributes = { body: comment.text() };
+
+      if (comment.attachments().length > 0) {
+        attributes.uploads = [];
+
+        _.each(comment.attachments(), function(attachment) {
+          attributes.uploads.push(attachment.token());
+        });
+      }
+
+      return attributes;
     },
 
     serializeCustomFields: function(){
