@@ -147,6 +147,7 @@
       this.ticket().type('ticket');
       this.ticket().requester({ email: ''});
       this.ticket().tags([]);
+      this.ticket().status('new');
 
       this.forEachCustomField(function(field){
         this.ticket().customField(field.label, '');
