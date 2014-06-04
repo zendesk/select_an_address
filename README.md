@@ -39,13 +39,28 @@ Ok, now you should be on the app settings page, let me guide you through.
 
 ```json
 {
-  "kingdom_of_the_north": "support-winterfell@wildfireretailer.got",
-  "kingdom_of_the_mountain_and_the_vale": "support-eyrie@wildfireretailer.got",
-  "kingdom_of_the_isles_and_rivers":"support-harrenhal@wildfireretailer.got",
-  "kingdom_of_the_rock":"support-casterlyrock@wildfireretailer.got",
-  "kingdom_of_the_stormlands":"support-stormsend@wildfireretailer.got",
-  "kingdom_of_the_reach":"support-highgarden@wildfireretailer.got",
-  "dorne": "support-sunspear@wildfireretailer.got"
+  "kingdom_of_the_north": {
+    "Default": "winterfell@wildfireretailer.got"
+    "Support": "support-winterfell@wildfireretailer.got"
+  },
+  "kingdom_of_the_mountain_and_the_vale": {
+    "Support": "support-@wildfireretailer.got"
+  },
+  "kingdom_of_the_isles_and_rivers": {
+    "Support": "support-harrenhal@wildfireretailer.got"
+  },
+  "kingdom_of_the_rock": {
+    "Support": "support-casterlyrock@wildfireretailer.got"
+  },
+  "kingdom_of_the_stormlands": {
+    "Support": "support-stormsend@wildfireretailer.got"
+  },
+  "kingdom_of_the_reach": {
+    "Support": "support-highgarden@wildfireretailer.got"
+  },
+  "dorne":  {
+    "Support": "support-sunspear@wildfireretailer.got"
+  }
 }
 ```
 * **Force selection of brand:** Make the brand selection mandatory.

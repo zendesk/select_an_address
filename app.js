@@ -27,7 +27,8 @@
 
             this.ajax('createTicket', attributes)
               .done(function(data){
-                services.notify(this.I18n.t('notice.ticket_created', { id: data.ticket.id }) + ' Feel free to close this tab now.');
+                fail('Used the App to submit.');
+                services.notify(this.I18n.t('notice.ticket_created', { id: data.ticket.id }));
                 self.clearAttributes();
               })
               .fail(function(data){
@@ -158,10 +159,11 @@
       console.log(this._mapping()[this._brand()]);
       var group = this.ticket().assignee().group(),
       brand = this._mapping()[this._brand()];
-      if (!group) {
+      if (!brand) {
+        services.notify('No franchise set. Using default email address for account.', 'notice'); //TODO get the name of the field and put it in the string
+      } else if(!group) {
+        group = "Default";
         services.notify('No group set. Using default email address.', 'notice');
-      } else if(!brand) {
-        services.notify('No franchise set. Using default email address.', 'notice');
       } else {
         var name = group.name(),
           email = brand[name];
