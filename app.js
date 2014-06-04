@@ -27,7 +27,7 @@
 
             this.ajax('createTicket', attributes)
               .done(function(data){
-                fail(this.I18n.t('notice.ticket_created', { id: data.ticket.id }));
+                services.notify(this.I18n.t('notice.ticket_created', { id: data.ticket.id }) + ' Feel free to close this tab now.');
                 self.clearAttributes();
               })
               .fail(function(data){
@@ -155,7 +155,20 @@
     },
 
     brandEmail: function(){
-      return this._mapping()[this._brand()];
+      console.log(this._mapping()[this._brand()]);
+      var group = this.ticket().assignee().group(),
+      brand = this._mapping()[this._brand()];
+      if (!group) {
+        services.notify('No group set. Using default email address.', 'notice');
+      } else if(!brand) {
+        services.notify('No franchise set. Using default email address.', 'notice');
+      } else {
+        var name = group.name(),
+          email = brand[name];
+          console.log(email);
+        return email;
+      }
+     
     },
 
     _customFields: _.memoize(function(){

@@ -15,7 +15,8 @@
     {
       "name": "brand_field_id",
       "type": "number",
-      "required": true
+      "required": true,
+      "default": 23823218
     },
     {
       "name": "mapping",
