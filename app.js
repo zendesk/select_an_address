@@ -13,31 +13,64 @@
           data: JSON.stringify(data),
           contentType: 'application/json'
         };
+      },
+      updateTicket: function(data, id) {
+        return {
+          url: helpers.fmt('/api/v2/tickets/%@.json', id),
+          dataType: 'json',
+          type: 'PUT',
+          data: JSON.stringify(data),
+          contentType: 'application/json'
+        };
       }
     },
 
     onTicketSave: function() {
       return this.promise(function(done, fail){
         var self = this,
-        attributes;
-
+        attributes = {};
+        var location = this.currentLocation();
         if (this.shouldCreateTicket(done, fail)){
-          try {
-            attributes = this.serializeTicketAttributes();
 
-            this.ajax('createTicket', attributes)
-              .done(function(data){
-                fail('Used the App to submit.');
-                services.notify(this.I18n.t('notice.ticket_created', { id: data.ticket.id }));
-                self.clearAttributes();
-              })
-              .fail(function(data){
-                fail(data.responseText);
-              });
-          } catch(e) {
-            console.log(e.stack);
-            fail(e.message);
+          // If the location is NEW ticket the app should create a ticket
+
+          if(location == 'new_ticket_sidebar') {
+            try {
+              attributes = this.serializeTicketAttributes(location);
+
+              this.ajax('createTicket', attributes)
+                .done(function(data){
+                  fail('Used the App to submit.');
+                  services.notify(this.I18n.t('notice.ticket_created', { id: data.ticket.id }));
+                  self.clearAttributes();
+
+                })
+                .fail(function(data){
+                  fail(data.responseText);
+                });
+            } catch(e) {
+              fail(e.message);
+            }
+          } else {
+          // if location is not new_ticket_sidebar it should update the existing ticket
+            var id = this.ticket().id();
+            try {
+              attributes = this.serializeTicketAttributes(location);
+
+              this.ajax('updateTicket', attributes, id)
+                .done(function(data){
+                  fail('Used the App to submit. Please close/refresh this tab to avoid confusion.');
+                  services.notify(helpers.fmt('Ticket #%@ updated.', data.ticket.id)); // change message to updated
+                  this.comment().text('');
+                })
+                .fail(function(data){
+                  fail(data.responseText);
+                });
+            } catch(e) {
+              fail(e.message);
+            }
           }
+
         }
       });
     },
@@ -55,24 +88,91 @@
       }
     },
 
-    serializeTicketAttributes: function(){
-      var ticket = this.ticket(),
-      attributes = {
-        subject: ticket.subject(),
-        comment: this.serializeCommentAttributes(),
-        description: this.comment().text(),
-        priority: ticket.priority(),
-        status: ticket.status(),
-        tags: ticket.tags(),
-        type: ticket.type(),
-        collaborators: _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
-        ticket_form_id: (ticket.form() && ticket.form().id()) || null,
-        assignee_id: (ticket.assignee().user() && ticket.assignee().user().id()) || null,
-        group_id: (ticket.assignee().group() && ticket.assignee().group().id()) || null,
-        recipient: this.brandEmail(),
-        custom_fields: this.serializeCustomFields(),
-        submitter_id: this.currentUser().id()
-      };
+    serializeTicketAttributes: function(location){
+      var ticket = this.ticket();
+      var attributes = {};
+      if(location == 'new_ticket_sidebar') { // if the location is new set certain attributes
+        attributes = {
+          subject: ticket.subject(),
+          comment: this.serializeCommentAttributes(),
+          description: this.comment().text(), // not for existing tickets
+          priority: ticket.priority(),
+          status: ticket.status(),
+          tags: ticket.tags(),
+          type: ticket.type(),
+          collaborators: _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
+          ticket_form_id: (ticket.form() && ticket.form().id()) || null,
+          assignee_id: (ticket.assignee().user() && ticket.assignee().user().id()) || null,
+          group_id: (ticket.assignee().group() && ticket.assignee().group().id()) || null,
+          recipient: this.brandEmail(),
+          custom_fields: this.serializeCustomFields(),
+          submitter_id: this.currentUser().id()
+        };
+      } else { // if the location is not new don't set description or submitter
+        var subject = ticket.subject(),
+          comment = this.serializeCommentAttributes(),
+          priority = ticket.priority(),
+          status = ticket.status(),
+          tags = ticket.tags(),
+          type = ticket.type(),
+          collaborators = _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
+          ticket_form_id = (ticket.form() && ticket.form().id()),
+          assignee_id = (ticket.assignee().user() && ticket.assignee().user().id()),
+          group_id = (ticket.assignee().group() && ticket.assignee().group().id()),
+          recipient = this.brandEmail(),
+          custom_fields = this.serializeCustomFields();
+        if(subject) {
+          attributes.subject = subject;
+        }
+        if(comment) {
+          attributes.comment = comment;
+        }
+        if(priority && priority != '-') {
+          attributes.priority = priority;
+        }
+        if(status && status != 'new') {
+          attributes.status = status;
+        }
+        if(tags) {
+          attributes.tags = tags;
+        }
+        if(type && type != 'ticket') {
+          attributes.type = type;
+        }
+        if(collaborators) {
+          attributes.collaborators = collaborators;
+        }
+        if(ticket_form_id) {
+          attributes.ticket_form_id = ticket_form_id;
+        }
+        if(assignee_id) {
+          attributes.assignee_id = assignee_id;
+        }
+        if(group_id) {
+          attributes.group_id = group_id;
+        }
+        if(recipient) {
+          attributes.recipient = recipient;
+        }
+        if(custom_fields) {
+          attributes.custom_fields = custom_fields;
+        }
+
+        // attributes = {
+        //   subject: ticket.subject(),
+        //   comment: this.serializeCommentAttributes(),
+        //   priority: ticket.priority(),
+        //   status: ticket.status(),
+        //   tags: ticket.tags(),
+        //   type: ticket.type(),
+        //   collaborators: _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
+        //   ticket_form_id: (ticket.form() && ticket.form().id()) || null,
+        //   assignee_id: (ticket.assignee().user() && ticket.assignee().user().id()) || null,
+        //   group_id: (ticket.assignee().group() && ticket.assignee().group().id()) || null,
+        //   recipient: this.brandEmail(),
+        //   custom_fields: this.serializeCustomFields()
+        // };
+      } // end if/else
 
       if (ticket.requester()) {
         if (ticket.requester().id()) {
@@ -92,9 +192,13 @@
     },
 
     serializeCommentAttributes: function() {
-      var comment = this.comment(),
-          attributes = { body: comment.text() };
 
+      var comment = this.comment();
+      var public = true;
+      if (comment.type() == "internalNote") {
+        public = 'false';
+      }
+      var attributes = { body: comment.text(), public: public };
       if (comment.attachments().length > 0) {
         attributes.uploads = [];
 
@@ -156,18 +260,25 @@
     },
 
     brandEmail: function(){
-      console.log(this._mapping()[this._brand()]);
       var group = this.ticket().assignee().group(),
-      brand = this._mapping()[this._brand()];
+      brand = this._mapping()[this._brand()],
+      email,
+      name;
       if (!brand) {
-        services.notify('No franchise set. Using default email address for account.', 'notice'); //TODO get the name of the field and put it in the string
+        services.notify('No franchise set. Using default.', 'notice');
+        //TODO get the name of the field and put it in the error string
+
       } else if(!group) {
-        group = "Default";
-        services.notify('No group set. Using default email address.', 'notice');
+        name = "Default";
+        email = brand[name];
+        console.log(email);
+        services.notify(helpers.fmt('No group set. Using default email address %@.', email), 'notice');
+        return email;
+
       } else {
-        var name = group.name(),
-          email = brand[name];
-          console.log(email);
+        name = group.name();
+        email = brand[name];
+        console.log(email);
         return email;
       }
      
