@@ -10,7 +10,7 @@
       },
       "mapping" : {
         "label": "Email-Brand mapping JSON",
-        "helpText": "A Json string which maps brand names to the associated email addresses. Example: {\"brand1\" : \"service@brand1.de\", \"brand2\" : \"service@brand2.de\"}"
+        "helpText": "A JSON string which maps brand names to the associated email addresses. Example: {\"brand1\" : \"service@brand1.de\", \"brand2\" : \"service@brand2.de\"}"
       },
       "force_selection_of_brand" : {
         "label": "Force selection of brand",
@@ -28,6 +28,7 @@
     "brand": "Brand cannot be blank."
   },
   "notice": {
-    "ticket_created": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> has been created"
+    "ticket_created": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> has been created and will send from {{email}}.",
+    "ticket_updated": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> has been updated and will send from {{email}}."
   }
 }

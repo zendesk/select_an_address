@@ -26,6 +26,7 @@
     },
 
     onTicketSave: function() {
+      console.log("brand ticket ran");
       return this.promise(function(done, fail){
         var self = this,
         attributes = {};
@@ -40,10 +41,9 @@
 
               this.ajax('createTicket', attributes)
                 .done(function(data){
-                  fail('Used the App to submit.');
-                  services.notify(this.I18n.t('notice.ticket_created', { id: data.ticket.id }));
+                  fail('Used the Brand App to submit.');
+                  services.notify(this.I18n.t('notice.ticket_created', { id: data.ticket.id, email: data.ticket.recipient }));
                   self.clearAttributes();
-
                 })
                 .fail(function(data){
                   fail(data.responseText);
@@ -59,8 +59,8 @@
 
               this.ajax('updateTicket', attributes, id)
                 .done(function(data){
-                  fail('Used the App to submit. Please close/refresh this tab to avoid confusion.');
-                  services.notify(helpers.fmt('Ticket #%@ updated.', data.ticket.id)); // change message to updated
+                  fail('Used the Brand App to submit the ticket. Refresh the ticket to see the updates.');
+                  services.notify(this.I18n.t('notice.ticket_updated', { id: data.ticket.id, email: data.ticket.recipient }));
                   this.comment().text('');
                 })
                 .fail(function(data){
@@ -74,7 +74,6 @@
         }
       });
     },
-
     shouldCreateTicket: function(done, fail){
       if (_.isEmpty(this.brandEmail())) {
         if (this.setting('force_selection_of_brand')) {
@@ -87,7 +86,6 @@
         return true;
       }
     },
-
     serializeTicketAttributes: function(location){
       var ticket = this.ticket();
       var attributes = {};
@@ -157,7 +155,6 @@
         if(custom_fields) {
           attributes.custom_fields = custom_fields;
         }
-
         // attributes = {
         //   subject: ticket.subject(),
         //   comment: this.serializeCommentAttributes(),
@@ -173,7 +170,6 @@
         //   custom_fields: this.serializeCustomFields()
         // };
       } // end if/else
-
       if (ticket.requester()) {
         if (ticket.requester().id()) {
           attributes.requester_id = ticket.requester().id();
@@ -187,12 +183,9 @@
           throw({ message: this.I18n.t('errors.requester_email') });
         }
       }
-
       return { ticket: attributes };
     },
-
     serializeCommentAttributes: function() {
-
       var comment = this.comment();
       var public = true;
       if (comment.type() == "internalNote") {
@@ -206,13 +199,10 @@
           attributes.uploads.push(attachment.token());
         });
       }
-
       return attributes;
     },
-
     serializeCustomFields: function(){
       var fields = [];
-
       this.forEachCustomField(function(field){
         if (!this._isEmpty(field.value)){
           fields.push({
@@ -221,10 +211,8 @@
           });
         }
       });
-
       return fields;
     },
-
     forEachCustomField: function(block){
       _.each(this._customFields(), function(field){
         var id = field.match(this.customFieldRegExp)[1],
@@ -237,14 +225,12 @@
         });
       }, this);
     },
-
     normalizeValue: function(value){
       return {
         "yes": true,
         "no": false
       }[value] || value;
     },
-
     clearAttributes: function(){
       this.ticket().subject('');
       this.comment().text('');
@@ -253,53 +239,41 @@
       this.ticket().requester({ email: ''});
       this.ticket().tags([]);
       this.ticket().status('new');
-
       this.forEachCustomField(function(field){
         this.ticket().customField(field.label, '');
       });
     },
-
     brandEmail: function(){
       var group = this.ticket().assignee().group(),
       brand = this._mapping()[this._brand()],
       email,
       name;
       if (!brand) {
-        services.notify('No franchise set. Using default.', 'notice');
-        //TODO get the name of the field and put it in the error string
-
+        console.log("No brand selected/detected.");
       } else if(!group) {
+        console.log("No group selected/detected.");
         name = "Default";
         email = brand[name];
-        console.log(email);
-        services.notify(helpers.fmt('No group set. Using default email address %@.', email), 'notice');
         return email;
-
       } else {
         name = group.name();
         email = brand[name];
-        console.log(email);
         return email;
       }
-     
     },
-
     _customFields: _.memoize(function(){
       return _.filter(_.keys(this.containerContext().ticket), function(field){
         return field.match(this.customFieldRegExp);
       }, this);
     }),
-
     _brand: function(){
       return this.ticket().customField('custom_field_%@'.fmt(this.setting('brand_field_id')));
     },
-
     _isEmpty: function(field){
       return _.isUndefined(field) ||
         _.isNull(field) ||
         field === '-';
     },
-
     _mapping: _.memoize(function(){
       return JSON.parse(this.setting('mapping'));
     })
