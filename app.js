@@ -24,25 +24,20 @@
         };
       }
     },
-
     onTicketSave: function() {
-      console.log("brand ticket ran");
       return this.promise(function(done, fail){
         var self = this,
         attributes = {};
         var location = this.currentLocation();
         if (this.shouldCreateTicket(done, fail)){
-
           // If the location is NEW ticket the app should create a ticket
-
           if(location == 'new_ticket_sidebar') {
             try {
               attributes = this.serializeTicketAttributes(location);
-
               this.ajax('createTicket', attributes)
                 .done(function(data){
-                  fail('Used the Brand App to submit.');
-                  services.notify(this.I18n.t('notice.ticket_created', { id: data.ticket.id, email: data.ticket.recipient }));
+                  fail(this.I18n.t('notice.ticket_created', { id: data.ticket.id, email: data.ticket.recipient }));
+                  // services.notify();
                   self.clearAttributes();
                 })
                 .fail(function(data){
@@ -56,12 +51,12 @@
             var id = this.ticket().id();
             try {
               attributes = this.serializeTicketAttributes(location);
-
               this.ajax('updateTicket', attributes, id)
                 .done(function(data){
-                  fail('Used the Brand App to submit the ticket. Refresh the ticket to see the updates.');
                   services.notify(this.I18n.t('notice.ticket_updated', { id: data.ticket.id, email: data.ticket.recipient }));
-                  this.comment().text('');
+                  done('Used the Brand App to change the email.');
+                  
+                  // this.comment().text('');
                 })
                 .fail(function(data){
                   fail(data.responseText);
@@ -70,7 +65,6 @@
               fail(e.message);
             }
           }
-
         }
       });
     },
@@ -107,69 +101,11 @@
           submitter_id: this.currentUser().id()
         };
       } else { // if the location is not new don't set description or submitter
-        var subject = ticket.subject(),
-          comment = this.serializeCommentAttributes(),
-          priority = ticket.priority(),
-          status = ticket.status(),
-          tags = ticket.tags(),
-          type = ticket.type(),
-          collaborators = _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
-          ticket_form_id = (ticket.form() && ticket.form().id()),
-          assignee_id = (ticket.assignee().user() && ticket.assignee().user().id()),
-          group_id = (ticket.assignee().group() && ticket.assignee().group().id()),
-          recipient = this.brandEmail(),
-          custom_fields = this.serializeCustomFields();
-        if(subject) {
-          attributes.subject = subject;
-        }
-        if(comment) {
-          attributes.comment = comment;
-        }
-        if(priority && priority != '-') {
-          attributes.priority = priority;
-        }
-        if(status && status != 'new') {
-          attributes.status = status;
-        }
-        if(tags) {
-          attributes.tags = tags;
-        }
-        if(type && type != 'ticket') {
-          attributes.type = type;
-        }
-        if(collaborators) {
-          attributes.collaborators = collaborators;
-        }
-        if(ticket_form_id) {
-          attributes.ticket_form_id = ticket_form_id;
-        }
-        if(assignee_id) {
-          attributes.assignee_id = assignee_id;
-        }
-        if(group_id) {
-          attributes.group_id = group_id;
-        }
+        var recipient = this.brandEmail();
         if(recipient) {
           attributes.recipient = recipient;
         }
-        if(custom_fields) {
-          attributes.custom_fields = custom_fields;
-        }
-        // attributes = {
-        //   subject: ticket.subject(),
-        //   comment: this.serializeCommentAttributes(),
-        //   priority: ticket.priority(),
-        //   status: ticket.status(),
-        //   tags: ticket.tags(),
-        //   type: ticket.type(),
-        //   collaborators: _.map(ticket.collaborators(), function(cc) { return cc.email(); }),
-        //   ticket_form_id: (ticket.form() && ticket.form().id()) || null,
-        //   assignee_id: (ticket.assignee().user() && ticket.assignee().user().id()) || null,
-        //   group_id: (ticket.assignee().group() && ticket.assignee().group().id()) || null,
-        //   recipient: this.brandEmail(),
-        //   custom_fields: this.serializeCustomFields()
-        // };
-      } // end if/else
+      }
       if (ticket.requester()) {
         if (ticket.requester().id()) {
           attributes.requester_id = ticket.requester().id();
