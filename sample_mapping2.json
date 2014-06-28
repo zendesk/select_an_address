@@ -1,1 +1,1 @@
-{"brand_a": {"Default": "support+branda@josephmccarron.com"},"brand_b": {"Default": "support+branda@josephmccarron.com"}}
+{"brand_a": {"Default": "support+branda@josephmccarron.com", "Support":"support+branda@josephmccarron.com", "Level 2":"support+branda_level2@josephmccarron.com"},"brand_b": {"Default": "support+brandb@josephmccarron.com", "Support": "support+brandb@josephmccarron.com", "Level 2": "support+brandb_level2@josephmccarron.com"}}

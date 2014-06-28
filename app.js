@@ -28,10 +28,15 @@
       return this.promise(function(done, fail){
         var self = this,
         attributes = {};
-        var location = this.currentLocation();
+        var location = this.currentLocation(),
+            newTickets = this.setting("new_tickets?"),
+            existingTickets = this.setting("existing_tickets?");
+        console.log("New Tickets? " + newTickets);
+        console.log("Existing Tickets? " + existingTickets);
+        debugger;
         if (this.shouldCreateTicket(done, fail)){
           // If the location is NEW ticket the app should create a ticket
-          if(location == 'new_ticket_sidebar') {
+          if(location == 'new_ticket_sidebar' && newTickets == "true") {
             try {
               attributes = this.serializeTicketAttributes(location);
               this.ajax('createTicket', attributes)
@@ -46,7 +51,7 @@
             } catch(e) {
               fail(e.message);
             }
-          } else {
+          } else if(location == 'ticket_sidebar' && existingTickets == "true") {
           // if location is not new_ticket_sidebar it should update the existing ticket
             var id = this.ticket().id();
             try {
@@ -64,6 +69,8 @@
             } catch(e) {
               fail(e.message);
             }
+          } else {
+            done();
           }
         }
       });
