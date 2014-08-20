@@ -192,8 +192,8 @@
       name;
       if (!brand) {
         console.log("No brand selected/detected.");
-      } else if(!group) {
-        console.log("No group selected/detected.");
+      } else if(!group || !_.contains(brand, group)) {
+        console.log("No group selected & matched.");
         name = "Default";
         email = brand[name];
         return email;

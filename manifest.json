@@ -8,7 +8,7 @@
   "defaultLocale": "en",
   "private": true,
   "location": ["new_ticket_sidebar", "ticket_sidebar"],
-  "version": "0.1.2",
+  "version": "0.1.3",
   "frameworkVersion": "1.0",
   "noTemplate": true,
   "parameters": [
