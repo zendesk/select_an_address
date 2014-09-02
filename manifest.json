@@ -8,20 +8,9 @@
   "defaultLocale": "en",
   "private": true,
   "location": ["new_ticket_sidebar", "ticket_sidebar"],
-  "version": "0.1.3",
+  "version": "0.9.0",
   "frameworkVersion": "1.0",
   "parameters": [
-    {
-      "name": "brand_field_id",
-      "type": "number",
-      "required": true,
-      "default": 23823218
-    },
-    {
-      "name": "mapping",
-      "type": "text",
-      "required": true
-    },
     {
       "name": "force_selection_of_brand",
       "type": "checkbox"
