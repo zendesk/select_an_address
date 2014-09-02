@@ -1,0 +1,28 @@
+<div class="form">
+  {{#if newTicket}}
+    {{#defaultAddress}}
+    Default: {{name}}
+    {{/defaultAddress}}
+  {{/if}}
+  {{#recipientAddress}}
+  Recipient: {{email}}
+  {{/recipientAddress}}
+
+  <br><br>
+	<form>
+    <select class="address">
+      {{#if newTicket}}
+        {{#defaultAddress}}
+          <option value="{{email}}" selected>Default: {{email}}</option>
+        {{/defaultAddress}}
+      {{else}}
+        <option disabled selected>Choose one...</option>
+      {{/if}}
+      {{#each addresses}}
+        <option value="{{email}}">
+          {{email}}
+        </option>
+      {{/each}}
+    </select>
+	</form>
+</div>

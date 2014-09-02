@@ -2,9 +2,20 @@
   return {
     customFieldRegExp: new RegExp(/custom_field_([0-9]+)/),
     events: {
+      'app.created':'loadOptions',
       'ticket.save':'onTicketSave'
     },
     requests: {
+      getAddresses: function() {
+        return {
+          url: '/api/v2/recipient_addresses.json'
+        };
+      },
+      getTicket: function() {
+        return {
+          url: helpers.fmt('/api/v2/tickets/%@.json', this.ticket().id())
+        };
+      },
       createTicket: function(data) {
         return {
           url: '/api/v2/tickets.json',
@@ -23,6 +34,43 @@
           contentType: 'application/json'
         };
       }
+    },
+    loadOptions: function() {
+      this.ajax('getAddresses').done(function(response) {
+        this.addresses = response.recipient_addresses;
+        var defaultAddress;
+        var recipientAddress;
+        if(this.currentLocation() == 'new_ticket_sidebar') {
+          var newTicket = true;
+          defaultAddress = _.filter(this.addresses, function(address) { return address.default == true;})
+          this.switchTo('pickOne', {
+            newTicket: newTicket,
+            defaultAddress: defaultAddress,
+            recipientAddress: recipientAddress,
+            addresses: this.addresses
+          })
+
+
+        } else if (this.currentLocation() == 'ticket_sidebar') {
+          var newTicket = false;
+          this.ajax('getTicket').done(function(response) {
+            // GET the ticket's recipient
+            // set that as the default address (maybe change the wording?)
+
+            var currentAddress = response.ticket.recipient;
+            recipientAddress = _.filter(this.addresses, function(address) { return address.email == currentAddress;})
+
+            this.switchTo('pickOne', {
+              newTicket: newTicket,
+              defaultAddress: defaultAddress,
+              recipientAddress: recipientAddress,
+              addresses: this.addresses
+            })
+          })
+        }
+        
+        // debugger;
+      })
     },
     onTicketSave: function() {
       return this.promise(function(done, fail){
@@ -186,22 +234,8 @@
       });
     },
     brandEmail: function(){
-      var group = this.ticket().assignee().group(),
-      brand = this._mapping()[this._brand()],
-      email,
-      name;
-      if (!brand) {
-        console.log("No brand selected/detected.");
-      } else if(!group || !_.contains(brand, group)) {
-        console.log("No group selected & matched.");
-        name = "Default";
-        email = brand[name];
-        return email;
-      } else {
-        name = group.name();
-        email = brand[name];
-        return email;
-      }
+      var fieldValue = this.$('select.address').val();
+      return fieldValue;
     },
     _customFields: _.memoize(function(){
       return _.filter(_.keys(this.containerContext().ticket), function(field){

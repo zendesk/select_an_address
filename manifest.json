@@ -1,5 +1,5 @@
 {
-  "name": "Brand Ticket Email",
+  "name": "Select Support Address",
   "author": {
     "name": "Zendesk Services",
     "email": "services@zendesk.com"
@@ -10,7 +10,6 @@
   "location": ["new_ticket_sidebar", "ticket_sidebar"],
   "version": "0.1.3",
   "frameworkVersion": "1.0",
-  "noTemplate": true,
   "parameters": [
     {
       "name": "brand_field_id",
