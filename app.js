@@ -40,37 +40,37 @@
         this.addresses = response.recipient_addresses;
         var defaultAddress;
         var recipientAddress;
+        var newTicket;
         if(this.currentLocation() == 'new_ticket_sidebar') {
-          var newTicket = true;
-          defaultAddress = _.filter(this.addresses, function(address) { return address.default == true;})
+          newTicket = true;
+          defaultAddress = _.filter(this.addresses, function(address) { return address.default === true;});
           this.switchTo('pickOne', {
             newTicket: newTicket,
             defaultAddress: defaultAddress,
             recipientAddress: recipientAddress,
             addresses: this.addresses
-          })
-
+          });
 
         } else if (this.currentLocation() == 'ticket_sidebar') {
-          var newTicket = false;
+          newTicket = false;
           this.ajax('getTicket').done(function(response) {
             // GET the ticket's recipient
             // set that as the default address (maybe change the wording?)
 
             var currentAddress = response.ticket.recipient;
-            recipientAddress = _.filter(this.addresses, function(address) { return address.email == currentAddress;})
+            recipientAddress = _.filter(this.addresses, function(address) { return address.email == currentAddress;});
 
             this.switchTo('pickOne', {
               newTicket: newTicket,
               defaultAddress: defaultAddress,
               recipientAddress: recipientAddress,
               addresses: this.addresses
-            })
-          })
+            });
+          });
         }
         
         // debugger;
-      })
+      });
     },
     onTicketSave: function() {
       return this.promise(function(done, fail){
