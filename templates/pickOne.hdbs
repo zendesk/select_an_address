@@ -16,7 +16,11 @@
           <option value="{{email}}" selected>Default: {{email}}</option>
         {{/defaultAddress}}
       {{else}}
-        <option disabled selected>Choose one...</option>
+        {{#if recipientAddress}}
+          <option value="{{email}}" selected>Current: {{email}}</option>
+        {{else}}
+          <option disabled selected>Choose one...</option>
+        {{/if}}
       {{/if}}
       {{#each addresses}}
         <option value="{{email}}">

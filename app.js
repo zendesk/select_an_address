@@ -154,7 +154,7 @@
           custom_fields: this.serializeCustomFields(),
           submitter_id: this.currentUser().id()
         };
-      } else { // if the location is not new don't set description or submitter
+      } else { // if the location is not new just set recipient
         var recipient = this.brandEmail();
         if(recipient) {
           attributes.recipient = recipient;
