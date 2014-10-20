@@ -1,6 +1,7 @@
 (function() {
   return {
     customFieldRegExp: new RegExp(/custom_field_([0-9]+)/),
+    dateRegExp : new RegExp(/([0-9]:00:00 GMT[\+\-])/),
     events: {
       'app.created':'loadOptions',
       'ticket.save':'onTicketSave'
@@ -72,8 +73,6 @@
             });
           });
         }
-        
-        // debugger;
       });
     },
     onTicketSave: function() {
@@ -195,20 +194,55 @@
       }
       return attributes;
     },
+    // serializeCustomFields: function(){
+    //   var fields = [];
+    //   this.forEachCustomField(function(field){
+    //     if (!this._isEmpty(field.value)){
+    //       // TODO: add condition for dates here
+
+    //       fields.push({
+    //         id: field.id,
+    //         value: field.value
+    //       });
+    //     }
+    //   });
+    //   return fields;
+    // },
+
     serializeCustomFields: function(){
       var fields = [];
-      this.forEachCustomField(function(field){
-        if (!this._isEmpty(field.value)){
-          // TODO: add condition for dates here
 
+      this.forEachCustomField(function(field){
+        if (field.value !== ""){
+          var test = ""+field.value+"";
+          var isDate = "";
+          if(field.value !== undefined){
+              isDate = test.match(this.dateRegExp);
+          }
+          var value = "";
+          if(isDate !== "" && isDate !== null){
+            var date = new Date(field.value);
+            var year = date.getFullYear();
+            var month = (1 + date.getMonth()).toString();
+            month = month.length > 1 ? month : '0' + month;
+            var day = date.getDate().toString();
+            day = day.length > 1 ? day : '0' + day;
+            value = year+"-"+month+"-"+day;
+          }else{
+            value = field.value;
+          }
           fields.push({
             id: field.id,
-            value: field.value
+            value: value
           });
         }
       });
+      // debugger;
+      console.log(fields);
       return fields;
     },
+
+
     forEachCustomField: function(block){
       _.each(this._customFields(), function(field){
         var id = field.match(this.customFieldRegExp)[1],
@@ -228,6 +262,12 @@
       }[value] || value;
     },
     clearAttributes: function(){
+      // clear CCs
+      var collos = this.ticket().collaborators();
+      for(var i = 0; i < collos.length; i++){
+          this.ticket().collaborators().remove({ email: collos[i].email() });
+      }
+      // clear system fields
       this.ticket().subject('');
       this.comment().text('');
       this.ticket().priority('-');
@@ -235,6 +275,7 @@
       this.ticket().requester({ email: ''});
       this.ticket().tags([]);
       this.ticket().status('new');
+      // clear custom fields
       this.forEachCustomField(function(field){
         this.ticket().customField(field.label, '');
       });
