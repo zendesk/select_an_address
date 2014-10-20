@@ -1,14 +1,5 @@
 <div class="form">
-  {{#if newTicket}}
-    {{#defaultAddress}}
-    Default: {{name}}
-    {{/defaultAddress}}
-  {{/if}}
-  {{#recipientAddress}}
-  Recipient: {{email}}
-  {{/recipientAddress}}
 
-  <br><br>
 	<form>
     <select class="address">
       {{#if newTicket}}
@@ -16,10 +7,11 @@
           <option value="{{email}}" selected>Default: {{email}}</option>
         {{/defaultAddress}}
       {{else}}
-        {{#if recipientAddress}}
+        {{#if recipientAddress}}{{#recipientAddress}}
           <option value="{{email}}" selected>Current: {{email}}</option>
         {{else}}
           <option disabled selected>Choose one...</option>
+        {{/recipientAddress}}
         {{/if}}
       {{/if}}
       {{#each addresses}}

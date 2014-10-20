@@ -40,15 +40,18 @@
         this.addresses = response.recipient_addresses;
         var defaultAddress;
         var recipientAddress;
+        var otherAddresses;
         var newTicket;
         if(this.currentLocation() == 'new_ticket_sidebar') {
           newTicket = true;
           defaultAddress = _.filter(this.addresses, function(address) { return address.default === true;});
+          otherAddresses = _.filter(this.addresses, function(address) { return address.default !== true;});
+
           this.switchTo('pickOne', {
             newTicket: newTicket,
             defaultAddress: defaultAddress,
             recipientAddress: recipientAddress,
-            addresses: this.addresses
+            addresses: otherAddresses
           });
 
         } else if (this.currentLocation() == 'ticket_sidebar') {
@@ -59,12 +62,13 @@
 
             var currentAddress = response.ticket.recipient;
             recipientAddress = _.filter(this.addresses, function(address) { return address.email == currentAddress;});
+            otherAddresses = _.filter(this.addresses, function(address) { return address.email != currentAddress;});
 
             this.switchTo('pickOne', {
               newTicket: newTicket,
               defaultAddress: defaultAddress,
               recipientAddress: recipientAddress,
-              addresses: this.addresses
+              addresses: otherAddresses
             });
           });
         }
@@ -195,6 +199,8 @@
       var fields = [];
       this.forEachCustomField(function(field){
         if (!this._isEmpty(field.value)){
+          // TODO: add condition for dates here
+
           fields.push({
             id: field.id,
             value: field.value
