@@ -54,32 +54,25 @@
           newTicket = false;
           recipientAddress = _.filter(this.addresses, function(address) { return address.email == currentAddress;});
           otherAddresses = _.filter(this.addresses, function(address) { return address.email != currentAddress;});
-
           this.switchTo('pickOne', {
             newTicket: newTicket,
             defaultAddress: defaultAddress,
             recipientAddress: recipientAddress,
             addresses: otherAddresses
           });
-        } else {
-          this.hide(); // not strictly necessary
         }
       });
     },
     onAddressSelected: function(e) {
       e.preventDefault();
-      console.log('selected new address');
-
       var address = this._brandEmail(),
           location = this.currentLocation();
       if(location == 'new_ticket_sidebar') {
-
         this.ticket().recipient(address);
         services.notify( this.I18n.t('notice.ticket_created', { id: this.ticket().id(), email: address }) );
       } else if(location == 'ticket_sidebar') {
       // if location is ticket_sidebar
         var id = this.ticket().id();
-
         this.ticket().recipient(address);
         // IF successful
         services.notify( this.I18n.t('notice.ticket_updated', { id: this.ticket().id(), email: address }) );
