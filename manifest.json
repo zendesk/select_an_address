@@ -1,12 +1,12 @@
 {
   "name": "Select Support Address",
   "author": {
-    "name": "Zendesk Services",
-    "email": "services@zendesk.com"
+    "name": "Zendesk Labs",
+    "email": "zendesklabs@zendesk.com"
   },
 
   "defaultLocale": "en",
-  "private": true,
+  "private": false,
   "location": ["new_ticket_sidebar", "ticket_sidebar"],
   "version": "1.0.0",
   "frameworkVersion": "1.0",
