@@ -44,14 +44,12 @@
           newTicket = true;
           defaultAddress = _.filter(this.addresses, function(address) { return address.default === true;});
           otherAddresses = _.filter(this.addresses, function(address) { return address.default !== true;});
-
           this.switchTo('pickOne', {
             newTicket: newTicket,
             defaultAddress: defaultAddress,
             recipientAddress: recipientAddress,
             addresses: otherAddresses
           });
-
         } else if (currentLocation == 'ticket_sidebar' && existingTickets === true) {
           newTicket = false;
           recipientAddress = _.filter(this.addresses, function(address) { return address.email == currentAddress;});
