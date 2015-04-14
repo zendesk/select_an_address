@@ -1,67 +1,60 @@
 (function() {
   return {
     events: {
-      'app.activated':'loadOptions',
+      'app.created':'loadOptions',
       'change .address':'onAddressSelected'
     },
     requests: {
-      getAddresses: function() {
+      getAddresses: function(next_page) {
         return {
-          url: '/api/v2/recipient_addresses.json'
-        };
-      },
-      createTicket: function(data) {
-        return {
-          url: '/api/v2/tickets.json',
-          dataType: 'json',
-          type: 'POST',
-          data: JSON.stringify(data),
-          contentType: 'application/json'
-        };
-      },
-      updateTicket: function(data, id) {
-        return {
-          url: helpers.fmt('/api/v2/tickets/%@.json', id),
-          dataType: 'json',
-          type: 'PUT',
-          data: JSON.stringify(data),
-          contentType: 'application/json'
+          url: next_page || '/api/v2/recipient_addresses.json',
+          success: function(response) {
+            this.supportAddresses = this.supportAddresses.concat(response.recipient_addresses);
+            if(response.next_page) {
+              this.ajax('getAddresses', response.next_page);
+            } else {
+              this.parseResults(this.supportAddresses);
+              // console.log('Got all the addresses.')
+            }
+          }
         };
       }
     },
     loadOptions: function() {
-      this.ajax('getAddresses').done(function(response) {
-        this.addresses = response.recipient_addresses;
-        var defaultAddress,
-            recipientAddress,
-            otherAddresses,
-            newTicket,
-            currentAddress = this.ticket().recipient(),
-            currentLocation = this.currentLocation(),
-            newTickets = this.setting("new_tickets?"),
-            existingTickets = this.setting("existing_tickets?");
-        if(currentLocation == 'new_ticket_sidebar' && newTickets === true) {
-          newTicket = true;
-          defaultAddress = _.filter(this.addresses, function(address) { return address.default === true;});
-          otherAddresses = _.filter(this.addresses, function(address) { return address.default !== true;});
-          this.switchTo('pickOne', {
-            newTicket: newTicket,
-            defaultAddress: defaultAddress,
-            recipientAddress: recipientAddress,
-            addresses: otherAddresses
-          });
-        } else if (currentLocation == 'ticket_sidebar' && existingTickets === true) {
-          newTicket = false;
-          recipientAddress = _.filter(this.addresses, function(address) { return address.email == currentAddress;});
-          otherAddresses = _.filter(this.addresses, function(address) { return address.email != currentAddress;});
-          this.switchTo('pickOne', {
-            newTicket: newTicket,
-            defaultAddress: defaultAddress,
-            recipientAddress: recipientAddress,
-            addresses: otherAddresses
-          });
-        }
-      });
+      this.supportAddresses = [];
+      this.ajax('getAddresses');
+    },
+    parseResults: function(addresses) {
+      this.addresses = addresses;
+      var defaultAddress,
+          recipientAddress,
+          otherAddresses,
+          newTicket,
+          currentAddress = this.ticket().recipient(),
+          currentLocation = this.currentLocation(),
+          newTickets = this.setting("new_tickets?"),
+          existingTickets = this.setting("existing_tickets?");
+      if(currentLocation == 'new_ticket_sidebar' && newTickets === true) {
+        newTicket = true;
+        defaultAddress = _.filter(this.addresses, function(address) { return address.default === true;});
+        otherAddresses = _.filter(this.addresses, function(address) { return address.default !== true;});
+        this.switchTo('pickOne', {
+          newTicket: newTicket,
+          defaultAddress: defaultAddress,
+          recipientAddress: recipientAddress,
+          addresses: otherAddresses
+        });
+      } else if (currentLocation == 'ticket_sidebar' && existingTickets === true) {
+        newTicket = false;
+        recipientAddress = _.filter(this.addresses, function(address) { return address.email == currentAddress;});
+        otherAddresses = _.filter(this.addresses, function(address) { return address.email != currentAddress;});
+        this.switchTo('pickOne', {
+          newTicket: newTicket,
+          defaultAddress: defaultAddress,
+          recipientAddress: recipientAddress,
+          addresses: otherAddresses
+        });
+      }
     },
     onAddressSelected: function(e) {
       e.preventDefault();
