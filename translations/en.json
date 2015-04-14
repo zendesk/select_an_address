@@ -28,7 +28,7 @@
     "brand": "Brand cannot be blank."
   },
   "notice": {
-    "ticket_created": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> has been created via the Brand App and will send from {{email}}.<br>You can close this tab.",
-    "ticket_updated": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> has been updated to send from {{email}}."
+    "ticket_created": "This ticket will send from {{email}}.",
+    "ticket_updated": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> will be updated to send from {{email}}."
   }
 }

@@ -10,7 +10,7 @@
     "new_ticket_sidebar",
     "ticket_sidebar"
   ],
-  "version": "1.1.0",
+  "version": "1.1.1",
   "frameworkVersion": "1.0",
   "parameters": [
     {
