@@ -2,7 +2,17 @@
   return {
     events: {
       'app.created':'loadOptions',
-      'change .address':'onAddressSelected'
+      'change .address':'onAddressSelected',
+
+      // By not setting {brand_field_id} as a *required* parameter of the app, we give the admin the option
+      // to whether or not use the branding functionality. Unfortunately, if the user choses *not* to use it 
+      // (leave {brand_field_id} in blank), we cannot use this:
+      //
+      //    'ticket.custom_field_ticket.custom_field_{{brand_field_id}}.changed': 'brandChangedHandler'
+      //
+      // If {brand_field_id} is blank, the app would crash badly. So we'll be using '*.changed' instead
+      // as a workaround until a better solution comes up.
+      '*.changed': 'anyFieldChangedHandler'
     },
     requests: {
       getAddresses: function(next_page) {
@@ -74,6 +84,19 @@
     _brandEmail: function(){
       return this.$('select.address').val();
     },
+
+    // Handles the .changed event of any ticket field
+    anyFieldChangedHandler: function(e){
+      // If the changed field was {brand_field_id}
+      if(!_.isEmpty(this.setting('brand_field_id')) && e.propertyName === 'ticket.custom_field_'+ this.setting('brand_field_id')){
+        this.brandChangedHandler(e);
+      }
+    },
+
+    brandChangedHandler: function(e){
+      // This is where the magic will happen
+    }
+
     // _brand: function(){
     //   return this.ticket().customField('custom_field_%@'.fmt(this.setting('brand_field_id')));
     // },
