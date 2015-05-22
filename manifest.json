@@ -31,6 +31,16 @@
       "name": "existing_tickets?",
       "type": "checkbox",
       "default": true
+    },
+    {
+      "name": "brand_field_id",
+      "type": "number",
+      "required": false
+    },
+    {
+      "name": "brand_mapping",
+      "type": "multiline",
+      "required": false
     }
   ]
 }
