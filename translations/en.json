@@ -9,7 +9,7 @@
         "helpText": "Insert the Custom Field ID e.g. \"22758751\""
       },
       "brand_mapping" : {
-        "label": "Brand «» Email JSON mapping",
+        "label": "Brand x Email JSON mapping",
         "helpText": "A JSON string which maps brand names to the associated email addresses. Example: { \"brand1\":\"email@example.com\", \"other_brand\":\"account@domain.com\" }"
       },
       "force_selection_of_brand" : {
