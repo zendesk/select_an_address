@@ -93,15 +93,21 @@
       }
     },
 
+    // Handles the .change of custom_field_{brand_field_id}. Checks if there is an email address
+    // associated to the brand and automatically updates the email
     brandChangedHandler: function(e){
-      // This is where the magic will happen
-    }
+      console.log(this._mapping(this.setting('brand_mapping')));
+    },
 
-    // _brand: function(){
-    //   return this.ticket().customField('custom_field_%@'.fmt(this.setting('brand_field_id')));
-    // },
-    // _mapping: _.memoize(function(){
-    //   return JSON.parse(this.setting('mapping'));
-    // })
+    // Returns the JSON map as an object, if valid.
+    // If the JSON map is invalid (or it was not provided at all), a notification is shown to the user. 
+    _mapping: _.memoize(function(s){
+      try{
+        return JSON.parse(s);
+      } catch(e) {
+        services.notify(this.I18n.t('notice.invalid_json'), 'error', 30000);
+        return null;
+      }
+    })
   };
 }());

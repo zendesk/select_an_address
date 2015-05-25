@@ -29,6 +29,7 @@
   },
   "notice": {
     "ticket_created": "This ticket will send from {{email}}.",
-    "ticket_updated": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> will be updated to send from {{email}}."
+    "ticket_updated": "Ticket <a href='#/tickets/{{id}}'>#{{id}}</a> will be updated to send from {{email}}.",
+    "invalid_json": "There was a problem trying to associate the brand to the email address: The JSON provided for the mapping is invalid. Please report this to your system Admin."
   }
 }
