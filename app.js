@@ -93,10 +93,21 @@
       }
     },
 
-    // Handles the .change of custom_field_{brand_field_id}. Checks if there is an email address
-    // associated to the brand and automatically updates the email
+    // Handles the .change of custom_field_{brand_field_id} automatically selects the email address
     brandChangedHandler: function(e){
-      console.log(this._mapping(this.setting('brand_mapping')));
+      // Fetches JSON map 
+      var map = this._mapping(this.setting('brand_mapping'));
+
+      // No JSON map, no fun :(
+      if(map === null) return false; 
+
+      // Checks if selected brand exists in map
+      if(!_.has(map, e.newValue)) return false;
+
+      // Checks if mapped email address for selected brand actually exists in the <select>
+      if(!this.$("option[value='"+ map[e.newValue] +"']", 'select.address').size()) return false;
+
+      this.$('select.address').val(map[e.newValue]).trigger('change');
     },
 
     // Returns the JSON map as an object, if valid.
